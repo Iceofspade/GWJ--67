@@ -1,0 +1,35 @@
+[gd_scene load_steps=5 format=3 uid="uid://cipmy4t44t2ue"]
+
+[ext_resource type="Texture2D" uid="uid://bpy3enxl5vb63" path="res://assets/textures/colored-transparent.png" id="1_38mug"]
+[ext_resource type="Script" path="res://scenes/guy.gd" id="1_gvq2y"]
+[ext_resource type="PackedScene" uid="uid://drxu1s4t7w1js" path="res://scenes/user_controler.tscn" id="3_y2h1y"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_c7xyi"]
+size = Vector2(16, 16)
+
+[node name="guy" type="Node2D" node_paths=PackedStringArray("ray")]
+script = ExtResource("1_gvq2y")
+ray = NodePath("RayCast2D")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_38mug")
+region_enabled = true
+region_rect = Rect2(425, 0, 16, 16)
+
+[node name="RayCast2D" type="RayCast2D" parent="."]
+target_position = Vector2(16, 0)
+collide_with_areas = true
+
+[node name="arrow" type="Sprite2D" parent="RayCast2D"]
+position = Vector2(12, 0)
+texture = ExtResource("1_38mug")
+region_enabled = true
+region_rect = Rect2(408, 340, 16, 16)
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("RectangleShape2D_c7xyi")
+
+[node name="user_controler" parent="." node_paths=PackedStringArray("unit") instance=ExtResource("3_y2h1y")]
+unit = NodePath("..")

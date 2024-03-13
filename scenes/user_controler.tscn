@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://drxu1s4t7w1js"]
+
+[ext_resource type="Script" path="res://scenes/user_controler.gd" id="1_bx31w"]
+
+[node name="user_controler" type="Node" node_paths=PackedStringArray("unit")]
+script = ExtResource("1_bx31w")
+unit = NodePath("")
