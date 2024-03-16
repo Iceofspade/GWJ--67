@@ -1,28 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://cipmy4t44t2ue"]
+[gd_scene load_steps=8 format=3 uid="uid://cmwbw5reydnem"]
 
-[ext_resource type="Texture2D" uid="uid://bpy3enxl5vb63" path="res://assets/textures/colored-transparent.png" id="1_38mug"]
-[ext_resource type="Script" path="res://scenes/guy.gd" id="1_gvq2y"]
-[ext_resource type="PackedScene" uid="uid://drxu1s4t7w1js" path="res://scenes/user_controler.tscn" id="3_y2h1y"]
+[ext_resource type="Texture2D" uid="uid://bpy3enxl5vb63" path="res://assets/textures/colored-transparent.png" id="1_4cyp7"]
+[ext_resource type="Script" path="res://scenes/cat.gd" id="1_v5bvh"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_c7xyi"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2axya"]
 size = Vector2(16, 16)
-
-[sub_resource type="Animation" id="Animation_tfykt"]
-resource_name = "move"
-length = 0.5
-loop_mode = 1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:rotation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0.1, 0.4, 0.6),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [-0.331613, 0.331613, 0.0]
-}
 
 [sub_resource type="Animation" id="Animation_71kns"]
 length = 0.001
@@ -55,6 +37,23 @@ tracks/0/keys = {
 "values": [0.0, 1.5708]
 }
 
+[sub_resource type="Animation" id="Animation_tfykt"]
+resource_name = "move"
+length = 0.5
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.1, 0.4, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [-0.331613, 0.331613, 0.0]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_lw4jn"]
 _data = {
 "RESET": SubResource("Animation_71kns"),
@@ -62,16 +61,16 @@ _data = {
 "move": SubResource("Animation_tfykt")
 }
 
-[node name="guy" type="Node2D" node_paths=PackedStringArray("ray", "animator")]
-script = ExtResource("1_gvq2y")
+[node name="cat" type="Node2D" node_paths=PackedStringArray("ray", "animator")]
+script = ExtResource("1_v5bvh")
 ray = NodePath("RayCast2D")
 animator = NodePath("AnimationPlayer")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 rotation = -0.165806
-texture = ExtResource("1_38mug")
+texture = ExtResource("1_4cyp7")
 region_enabled = true
-region_rect = Rect2(425, 0, 16, 16)
+region_rect = Rect2(510, 119, 16, 16)
 
 [node name="RayCast2D" type="RayCast2D" parent="."]
 target_position = Vector2(16, 0)
@@ -79,17 +78,15 @@ collide_with_areas = true
 
 [node name="arrow" type="Sprite2D" parent="RayCast2D"]
 position = Vector2(12, 0)
-texture = ExtResource("1_38mug")
+texture = ExtResource("1_4cyp7")
 region_enabled = true
 region_rect = Rect2(408, 340, 16, 16)
 
 [node name="Area2D" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-shape = SubResource("RectangleShape2D_c7xyi")
-
-[node name="user_controler" parent="." node_paths=PackedStringArray("unit") instance=ExtResource("3_y2h1y")]
-unit = NodePath("..")
+rotation = 1.5708
+shape = SubResource("RectangleShape2D_2axya")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

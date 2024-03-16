@@ -6,7 +6,7 @@ signal lost_infection
 signal gain_infection
 @onready var controler = preload("res://scenes/user_controler.tscn")
 @export var ray:RayCast2D
-
+@export var animator:AnimationPlayer
 var target_pos:Vector2i
 var ray_angle:float
 
@@ -37,22 +37,22 @@ func _physics_process(_delta):
 		pass
 		
 func move_self():
-	# Automatic on contact swap
-	#if ray.get_collider() and ray.get_collider().get_parent() is Unit:
-		#print(ray.get_collider().get_parent())
-		#ray.get_collider().get_parent().emit_signal("gain_infection")
-		#emit_signal("lost_infection")
-		#return
 	var tile_map = Globals.tilemap
 	var tween = create_tween()
 	tween.tween_property(self,"position", tile_map.map_to_local(target_pos),0.2)
 	is_moving = true
 	ray.rotation = ray_angle
 	tween.play()
+	animator.play("move")
 	await tween.finished
 	is_moving = false
-	
+	animator.stop()
 	return tween.finished
+
+func get_next_pos(pos:Vector2i)->Vector2i:
+	var tile_map = Globals.tilemap
+	return pos + tile_map.local_to_map(global_position)
+
 
 func can_move_there(pos:Vector2i):
 	var tile_map = Globals.tilemap
