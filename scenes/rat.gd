@@ -5,7 +5,7 @@ var go_right = true
 
 
 func ai_contole():
-	if is_moving or is_infected:
+	if is_moving or is_infected or is_dead:
 		return
 	var tile_map = Globals.tilemap
 	

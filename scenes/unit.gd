@@ -12,6 +12,8 @@ var ray_angle:float
 
 var is_infected = false
 var is_moving = false
+var is_dead = false
+var infection_delay = false
 
 @export var max_movement = 3
 
@@ -23,12 +25,13 @@ func _init():
 func _ready():
 	if has_node("user_controler"):
 		is_infected = true
+		is_dead = true
 	Globals.step.connect(ai_contole)
 		
 func _physics_process(_delta):
 	# Uncomment for independant movement
-	#if !is_infected:
-		#ai_contole()
+	if !is_infected:
+		ai_contole()
 ## Automatic check on contact swap bodies
 	#elif ray.get_collider() and ray.get_collider().get_parent() is Unit and is_infected:
 		#print(ray.get_collider().get_parent())
@@ -37,17 +40,23 @@ func _physics_process(_delta):
 		pass
 		
 func move_self():
-	var tile_map = Globals.tilemap
-	var tween = create_tween()
-	tween.tween_property(self,"position", tile_map.map_to_local(target_pos),0.2)
-	is_moving = true
+	# Automatic on contact swap
 	ray.rotation = ray_angle
-	tween.play()
-	animator.play("move")
-	await tween.finished
-	is_moving = false
-	animator.stop()
-	return tween.finished
+	ray.force_raycast_update()
+	if ray.get_collider() and ray.get_collider().get_parent() is Unit:
+		print(ray.get_collider().get_parent())
+		ray.get_collider().get_parent().emit_signal("gain_infection")
+		ray.get_collider().get_parent().ray.rotation = ray_angle
+		emit_signal("lost_infection")
+	else:
+		var tile_map = Globals.tilemap
+		var tween = create_tween()
+		tween.tween_property(self,"position", tile_map.map_to_local(target_pos),0.2)
+		is_moving = true
+		tween.play()
+		await tween.finished
+		is_moving = false
+		return tween.finished
 
 func get_next_pos(pos:Vector2i)->Vector2i:
 	var tile_map = Globals.tilemap
@@ -63,15 +72,24 @@ func ai_contole():
 
 func add_infected():
 	if has_node("user_controler"):
+		modulate = Color.GREEN
 		return
 	var controls = controler.instantiate()
 	is_infected  = true
+	is_dead = true
+	ray.enabled = true
+	ray.show()
 	controls.unit = self
 	add_child(controls)
-	modulate = Color.GREEN
+	infection_delay = true
+	await get_tree().create_timer(0.2).timeout
+	infection_delay = false
 
 func remove_infection():
 	if has_node("user_controler"):
 		remove_child.call_deferred(get_node("user_controler"))
 		is_infected = false
 		modulate = Color.WHITE
+		if is_dead:
+			ray.enabled = false
+			ray.hide()
