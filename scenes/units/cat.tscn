@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=3 uid="uid://cmwbw5reydnem"]
 
 [ext_resource type="Texture2D" uid="uid://bpy3enxl5vb63" path="res://assets/textures/colored-transparent.png" id="1_4cyp7"]
-[ext_resource type="Script" path="res://scenes/cat.gd" id="1_v5bvh"]
+[ext_resource type="Script" path="res://scenes/units/cat.gd" id="1_v5bvh"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2axya"]
 size = Vector2(16, 16)
@@ -18,7 +18,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [-0.165806]
+"values": [0.0]
 }
 
 [sub_resource type="Animation" id="Animation_bgae5"]
@@ -67,7 +67,6 @@ ray = NodePath("RayCast2D")
 animator = NodePath("AnimationPlayer")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-rotation = -0.165806
 texture = ExtResource("1_4cyp7")
 region_enabled = true
 region_rect = Rect2(510, 119, 16, 16)

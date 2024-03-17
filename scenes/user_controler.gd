@@ -21,15 +21,15 @@ func _physics_process(_delta):
 		action_pressed = false
 		
 	unit.ray_angle = ((direction as Vector2).angle())
-		
-	if unit.ray.get_collider():
-		if unit.ray.get_collider().get_parent() is Unit:
-			print(unit.ray.get_collider().get_parent())
-			unit.ray.get_collider().get_parent().emit_signal("gain_infection")
-			unit.ray.get_collider().get_parent().ray.rotation = unit.ray_angle
-			unit.emit_signal("lost_infection")
-			return
-					
+	unit.current_dir = direction
+	#if unit.ray.get_collider():
+		#if unit.ray.get_collider().get_parent() is Unit:
+			#print(unit.ray.get_collider().get_parent())
+			#unit.ray.get_collider().get_parent().emit_signal("gain_infection")
+			#unit.ray.get_collider().get_parent().ray.rotation = unit.ray_angle
+			#unit.emit_signal("lost_infection")
+			#return
+					#
 	if action_pressed and !unit.infection_delay:
 		unit.ray.rotation = unit.ray_angle
 		if unit.can_move_there(direction + tile_map.local_to_map(unit.global_position)):
@@ -37,22 +37,8 @@ func _physics_process(_delta):
 			# Auto step base infection
 			
 			unit.move_self()
-			# Uncomment for step based swap bodies 
-			Globals.emit_signal("step")
-			
-	elif unit.ray.get_collider():
-		if  unit.ray.get_collider().get_parent() is Unit:
-			print(unit.ray.get_collider().get_parent())
-			unit.ray.rotation = ((direction as Vector2).angle()) 
-			unit.ray.get_collider().get_parent().emit_signal("gain_infection")
-			unit.emit_signal("lost_infection")
-			return
-	# Manual base infection
-	#if Input.is_action_just_pressed("infect") and unit.ray.get_collider():
-		#if  unit.ray.get_collider().get_parent() is Unit:
-			#print(unit.ray.get_collider().get_parent())
-			#unit.ray.get_collider().get_parent().emit_signal("gain_infection")
-			#unit.emit_signal("lost_infection")
+
+
 func _enter_tree():
 	#unit.is_infected = true
 	unit.emit_signal("gain_infection")
