@@ -3294,3 +3294,5 @@ zoom = Vector2(2, 2)
 
 [node name="Rat" parent="." instance=ExtResource("4_m7n3j")]
 position = Vector2(-8, 88)
+direction_set = Array[Vector2i]([Vector2i(1, 0), Vector2i(0, -1)])
+path_steps = Array[int]([6, 3])

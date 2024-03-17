@@ -15,6 +15,12 @@ var is_moving = false
 var is_dead = false
 var infection_delay = false
 
+@export var direction_set:Array[Vector2i]
+@export var path_steps:Array[int]
+var steps_made = 0
+var current_section = 0
+var pathing_direction = 1
+
 @export var max_movement = 3
 
 func _init():
@@ -68,6 +74,33 @@ func can_move_there(pos:Vector2i):
 	return !tile_map.get_cell_tile_data(0,pos).get_custom_data("Wall")
 
 func ai_contole():
+	if is_moving or is_infected or is_dead:
+		return
+	var tile_map = Globals.tilemap
+	
+	if direction_set.size() > 1:
+		if current_section == direction_set.size():
+			pathing_direction = -1
+			current_section -= 1
+		if current_section == -1:
+			pathing_direction = 1
+			current_section = 0
+	else:
+		if steps_made == path_steps[current_section]:
+			pathing_direction = -pathing_direction
+	
+	if steps_made < path_steps[current_section]:
+		target_pos = tile_map.local_to_map(global_position)+direction_set[current_section]*pathing_direction
+		ray_angle = Vector2(direction_set[current_section]*pathing_direction).angle()
+		steps_made += 1
+	else:
+		steps_made = 0
+		if direction_set.size() > 1:
+			current_section += pathing_direction
+	
+	# need to add backtracking logic in case path is interrupted
+	if can_move_there(target_pos):
+		move_self()
 	pass
 
 func add_infected():
